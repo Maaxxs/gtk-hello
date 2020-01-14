@@ -8,24 +8,35 @@ public class MyApp : Gtk.Application {
     }
 
     protected override void activate () {
-        var label = new Gtk.Label (null);
-        
-        var button_hello = new Gtk.Button.with_label (_("Click me!"));
-        button_hello.margin = 12;
+        var grid = new Gtk.Grid ();
+        grid.orientation = Gtk.Orientation.VERTICAL;
+        grid.set_border_width (16);
+        grid.row_spacing = 6;
+        grid.column_spacing = 6;
 
-        button_hello.clicked.connect (() => {
-            label.label = _("Hello World!");
-            button_hello.sensitive = false;
+        var hello_button = new Gtk.Button.with_label (_("Say Hello"));
+        var hello_label = new Gtk.Label (null);
+        
+        var rotate_button = new Gtk.Button.with_label (_("Rotate"));
+        var rotate_label = new Gtk.Label (_("Horizontal"));
+
+        hello_button.clicked.connect (() => {
+            hello_label.label = _("Hello World!");
+            hello_button.sensitive = false;
+        });
+        
+        rotate_button.clicked.connect (() => {
+            rotate_label.angle = 90;
+            rotate_label.label = _("Vertical");
+            rotate_button.sensitive = false;
         });
 
 
-        var grid = new Gtk.Grid ();
-        grid.orientation = Gtk.Orientation.VERTICAL;
-        grid.row_spacing = 6;
-        grid.set_border_width (16);
+        grid.attach (hello_button, 0, 0);
+        grid.attach_next_to (hello_label, hello_button, Gtk.PositionType.RIGHT);
 
-        grid.add (button_hello);
-        grid.add (label);
+        grid.attach (rotate_button, 0, 1);
+        grid.attach_next_to (rotate_label, rotate_button, Gtk.PositionType.RIGHT);
 
         var main_window = new Gtk.ApplicationWindow (this);
         main_window.default_height = 300;
